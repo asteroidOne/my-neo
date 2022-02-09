@@ -20,21 +20,15 @@
         <div id="chart-conainer">
             <canvas id="myChart"></canvas>
         </div>
-
         <div style="padding: 10px;backgroundColor:ghostwhite">
-            
             <h1>Fastest Asteroid</h1>
             <blockquote><strong>{{ fastestAstroid }}</strong></blockquote>
-
-           <h1>Closest Asteroid</h1>
-           <blockquote><strong>{{ closetAstroid }}</strong></blockquote>
-
-           <h1> Asteroid Size Collection</h1>
-           <li v-for="item in astriodSizeCollection">
-               {{item}}
-           </li>
-
-
+            <h1>Closest Asteroid</h1>
+            <blockquote><strong>{{ closetAstroid }}</strong></blockquote>
+            <h1> Asteroid Size Collection</h1>
+            <li v-for="item in astriodSizeCollection">
+                {{item}}
+            </li>
         </div>
     </div>
 </template>

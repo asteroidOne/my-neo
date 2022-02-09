@@ -2104,12 +2104,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
 
 
 
@@ -45531,7 +45525,7 @@ var render = function () {
         _vm._v(" "),
         _vm._l(_vm.astriodSizeCollection, function (item) {
           return _c("li", [
-            _vm._v("\n           " + _vm._s(item) + "\n       "),
+            _vm._v("\n            " + _vm._s(item) + "\n        "),
           ])
         }),
       ],

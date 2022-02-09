@@ -10,21 +10,6 @@ use Illuminate\Support\Facades\Http;
 class ListController extends Controller
 {
 	public function index(){
-		// dd($request->all());
-		// $productAppUrl = 'https://api.nasa.gov/planetary/apod?api_key=PysexB9MDTqTJjA30Uwcm4Vg7Iw2WUdIwppQtEnC';
-		// $client = new Client();
-		// $response = $client->request('POST', $productAppUrl);
-		// dd($response);
-		// if ($response->getStatusCode() == 200) {
-		// 	return true;
-		// }
-		// return false;
-
-		// $response = Http::get('https://api.nasa.gov/planetary/apod?api_key=PysexB9MDTqTJjA30Uwcm4Vg7Iw2WUdIwppQtEnC');
-   
-  //       $jsonData = $response->json();
-         
-  //       dd($jsonData);
 		return view('welcome');
     }
 
