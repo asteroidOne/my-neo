@@ -3,10 +3,10 @@
         <form method="get" @submit.prevent="submit">
             <div class="md:w-1/3">
                 <label>Start Date:
-                    <datepicker v-model="start_date" class="shadow appearance-none border border-gray-500 rounded py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline" :disabledDates="disabledDates"></datepicker>
+                    <datepicker v-model="start_date" class="shadow appearance-none border border-gray-500 rounded py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"></datepicker>
                 </label>
                 <label>End Date:
-                    <datepicker v-model="end_date" class="shadow appearance-none border border-gray-500 rounded py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline" :disabledDates="disabledDates"></datepicker>
+                    <datepicker v-model="end_date" class="shadow appearance-none border border-gray-500 rounded py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"></datepicker>
                 </label>
             </div>
             <button @click="submit" type="button" class="cursor-pointer text-xs font-semibold px-5 md:px-8 py-1 md:py-2 rounded-full text-white bg-green-700" :disabled="isbeingCreating">
@@ -52,9 +52,6 @@ export default {
         fastestAstroid:[],
         closetAstroid:[],
         astriodSizeCollection:[],
-        disabledDates: {
-          to: new Date(Date.now() - 8640000)
-        },
     }),
        
     methods: {

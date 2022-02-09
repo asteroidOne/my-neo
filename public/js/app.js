@@ -2121,10 +2121,7 @@ __webpack_require__.r(__webpack_exports__);
       astroids: [],
       fastestAstroid: [],
       closetAstroid: [],
-      astriodSizeCollection: [],
-      disabledDates: {
-        to: new Date(Date.now() - 8640000)
-      }
+      astriodSizeCollection: []
     };
   },
   methods: {
@@ -45411,7 +45408,6 @@ var render = function () {
               _c("datepicker", {
                 staticClass:
                   "shadow appearance-none border border-gray-500 rounded py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline",
-                attrs: { disabledDates: _vm.disabledDates },
                 model: {
                   value: _vm.start_date,
                   callback: function ($$v) {
@@ -45431,7 +45427,6 @@ var render = function () {
               _c("datepicker", {
                 staticClass:
                   "shadow appearance-none border border-gray-500 rounded py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline",
-                attrs: { disabledDates: _vm.disabledDates },
                 model: {
                   value: _vm.end_date,
                   callback: function ($$v) {
