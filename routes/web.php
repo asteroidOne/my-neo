@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ListController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,4 +17,7 @@ use Illuminate\Support\Facades\Route;
 // Route::get('/', function () {
 //     return view('app');
 // });
-Route::get('/{any}', 'App\Http\Controllers\ListController@index')->where('any','.*');
+// Route::post('/', 'App\Http\Controllers\ListController@index');
+
+Route::get('/',[ListController::class,'index']);
+Route::get('/nasa/api', [ListController::class, 'get' ]);

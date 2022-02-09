@@ -2102,6 +2102,14 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -2112,139 +2120,65 @@ __webpack_require__.r(__webpack_exports__);
   computed: {},
   data: function data() {
     return {
+      isbeingCreating: false,
       start_date: '',
       end_date: '',
       dates: [],
       astroids: [],
       fastestAstroid: [],
       closetAstroid: [],
-      astriodSizeCollection: []
+      astriodSizeCollection: [],
+      disabledDates: {
+        to: new Date(Date.now() - 8640000)
+      }
     };
   },
   methods: {
+    drawGraph: function drawGraph(dates, astroids) {
+      document.getElementById('chart-conainer').innerHTML = '<canvas id="myChart"></canvas>';
+      var ctx = document.getElementById('myChart').getContext('2d');
+      var myChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: dates,
+          datasets: [{
+            label: 'Asteroid',
+            data: astroids,
+            backgroundColor: ['rgba(255, 99, 132, 0.2)', 'rgba(54, 162, 235, 0.2)', 'rgba(255, 206, 86, 0.2)', 'rgba(75, 192, 192, 0.2)', 'rgba(153, 102, 255, 0.2)', 'rgba(255, 159, 64, 0.2)'],
+            borderColor: ['rgba(255, 99, 132, 1)', 'rgba(54, 162, 235, 1)', 'rgba(255, 206, 86, 1)', 'rgba(75, 192, 192, 1)', 'rgba(153, 102, 255, 1)', 'rgba(255, 159, 64, 1)'],
+            borderWidth: 1
+          }]
+        },
+        options: {
+          scales: {
+            y: {
+              beginAtZero: true
+            }
+          }
+        }
+      });
+    },
     submit: function submit() {
-      window.location.reload();
+      this.isbeingCreating = true;
       var vm = this;
-      vm.dates = Object.keys(_data_js__WEBPACK_IMPORTED_MODULE_2__["default"].near_earth_objects);
+      axios.get('/nasa/api?start_date=' + moment__WEBPACK_IMPORTED_MODULE_1__(this.start_date).format('yyyy-MM-DD') + '&end_date=' + moment__WEBPACK_IMPORTED_MODULE_1__(this.end_date).format('yyyy-MM-DD')).then(function (response) {
+        vm.dates = response.data.dates;
+        vm.astroids = response.data.astroids;
+        vm.fastestAstroid = response.data.fastestAstroid;
+        vm.closetAstroid = response.data.closetAstroid;
+        vm.astriodSizeCollection = response.data.astriodSizeCollection;
+        vm.drawGraph(vm.dates, vm.astroids);
 
-      for (var o in _data_js__WEBPACK_IMPORTED_MODULE_2__["default"].near_earth_objects) {
-        vm.astroids.push(_data_js__WEBPACK_IMPORTED_MODULE_2__["default"].near_earth_objects[o].length);
-      }
-
-      axios.get('http://api.nasa.gov/neo/rest/v1/feed?start_date=' + moment__WEBPACK_IMPORTED_MODULE_1__(vm.start_date).format('yyyy-MM-DD') + '&end_date=' + moment__WEBPACK_IMPORTED_MODULE_1__(vm.end_date).format('yyyy-MM-DD') + '&detailed=true&api_key=DEMO_KEY').then(function (response) {
-        vm.dates = Object.keys(response.near_earth_objects);
-        var fastestAstroidSpeed = 0;
-        var closetAstroidDistance = 0;
-
-        for (var o in response.near_earth_objects) {
-          response.near_earth_objects[o].forEach(function (element) {
-            // console.log(element)
-            // GET FASTEST ASTERIOD
-            var currentAstroidSpeed = element.close_approach_data[0].relative_velocity.kilometers_per_hour;
-
-            if (currentAstroidSpeed > fastestAstroidSpeed) {
-              fastestAstroidSpeed = currentAstroidSpeed;
-              vm.fastestAstroid = [];
-              vm.fastestAstroid.push({
-                AsteroidName: element.name,
-                ID: element.id,
-                Speed: currentAstroidSpeed
-              });
-            } // CLOSEST ASTERIOD
-
-
-            var currentAstroidDistance = element.close_approach_data[0].miss_distance.kilometers;
-
-            if (closetAstroidDistance == 0 || currentAstroidDistance < closetAstroidDistance) {
-              closetAstroidDistance = currentAstroidDistance;
-              vm.closetAstroid = [];
-              vm.closetAstroid.push({
-                AsteroidName: element.name,
-                ID: element.id,
-                Distance: currentAstroidDistance
-              });
-            } // ASTERIOD SIZE COLLECTION
-
-
-            var currentAstroiAvgSize = (element.estimated_diameter.kilometers.estimated_diameter_max + element.estimated_diameter.kilometers.estimated_diameter_min) / 2;
-            vm.astriodSizeCollection.push({
-              AsteroidName: element.name,
-              ID: element.id,
-              AvgSizeInKm: currentAstroiAvgSize
-            });
-          });
-          vm.astroids.push(_data_js__WEBPACK_IMPORTED_MODULE_2__["default"].near_earth_objects[o].length);
+        if (response) {
+          vm.isbeingCreating = false;
+        } else {
+          vm.isbeingCreating = false;
         }
       });
     }
   },
   mounted: function mounted() {
-    var vm = this;
-    this.dates = Object.keys(_data_js__WEBPACK_IMPORTED_MODULE_2__["default"].near_earth_objects);
-    var fastestAstroidSpeed = 0;
-    var closetAstroidDistance = 0;
-
-    for (var o in _data_js__WEBPACK_IMPORTED_MODULE_2__["default"].near_earth_objects) {
-      _data_js__WEBPACK_IMPORTED_MODULE_2__["default"].near_earth_objects[o].forEach(function (element) {
-        // console.log(element)
-        // GET FASTEST ASTERIOD
-        var currentAstroidSpeed = element.close_approach_data[0].relative_velocity.kilometers_per_hour;
-
-        if (currentAstroidSpeed > fastestAstroidSpeed) {
-          fastestAstroidSpeed = currentAstroidSpeed;
-          vm.fastestAstroid = [];
-          vm.fastestAstroid.push({
-            AsteroidName: element.name,
-            ID: element.id,
-            Speed: currentAstroidSpeed
-          });
-        } // CLOSEST ASTERIOD
-
-
-        var currentAstroidDistance = element.close_approach_data[0].miss_distance.kilometers;
-
-        if (closetAstroidDistance == 0 || currentAstroidDistance < closetAstroidDistance) {
-          closetAstroidDistance = currentAstroidDistance;
-          vm.closetAstroid = [];
-          vm.closetAstroid.push({
-            AsteroidName: element.name,
-            ID: element.id,
-            Distance: currentAstroidDistance
-          });
-        } // ASTERIOD SIZE COLLECTION
-
-
-        var currentAstroiAvgSize = (element.estimated_diameter.kilometers.estimated_diameter_max + element.estimated_diameter.kilometers.estimated_diameter_min) / 2;
-        vm.astriodSizeCollection.push({
-          AsteroidName: element.name,
-          ID: element.id,
-          AvgSizeInKm: currentAstroiAvgSize
-        });
-      });
-      this.astroids.push(_data_js__WEBPACK_IMPORTED_MODULE_2__["default"].near_earth_objects[o].length);
-    }
-
-    var ctx = document.getElementById('myChart').getContext('2d');
-    var myChart = new Chart(ctx, {
-      type: 'bar',
-      data: {
-        labels: this.dates,
-        datasets: [{
-          label: 'Asteroid',
-          data: this.astroids,
-          backgroundColor: ['rgba(255, 99, 132, 0.2)', 'rgba(54, 162, 235, 0.2)', 'rgba(255, 206, 86, 0.2)', 'rgba(75, 192, 192, 0.2)', 'rgba(153, 102, 255, 0.2)', 'rgba(255, 159, 64, 0.2)'],
-          borderColor: ['rgba(255, 99, 132, 1)', 'rgba(54, 162, 235, 1)', 'rgba(255, 206, 86, 1)', 'rgba(75, 192, 192, 1)', 'rgba(153, 102, 255, 1)', 'rgba(255, 159, 64, 1)'],
-          borderWidth: 1
-        }]
-      },
-      options: {
-        scales: {
-          y: {
-            beginAtZero: true
-          }
-        }
-      }
-    });
+    this.drawGraph([], []);
   }
 });
 
@@ -45475,41 +45409,107 @@ var render = function () {
         },
       },
       [
-        _c(
-          "label",
-          [
-            _vm._v("Start Date:\n                "),
-            _c("datepicker", {
-              model: {
-                value: _vm.start_date,
-                callback: function ($$v) {
-                  _vm.start_date = $$v
+        _c("div", { staticClass: "md:w-1/3" }, [
+          _c(
+            "label",
+            [
+              _vm._v("Start Date:\n                "),
+              _c("datepicker", {
+                staticClass:
+                  "shadow appearance-none border border-gray-500 rounded py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline",
+                attrs: { disabledDates: _vm.disabledDates },
+                model: {
+                  value: _vm.start_date,
+                  callback: function ($$v) {
+                    _vm.start_date = $$v
+                  },
+                  expression: "start_date",
                 },
-                expression: "start_date",
-              },
-            }),
-          ],
-          1
-        ),
+              }),
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "label",
+            [
+              _vm._v("End Date:\n                "),
+              _c("datepicker", {
+                staticClass:
+                  "shadow appearance-none border border-gray-500 rounded py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline",
+                attrs: { disabledDates: _vm.disabledDates },
+                model: {
+                  value: _vm.end_date,
+                  callback: function ($$v) {
+                    _vm.end_date = $$v
+                  },
+                  expression: "end_date",
+                },
+              }),
+            ],
+            1
+          ),
+        ]),
         _vm._v(" "),
         _c(
-          "label",
+          "button",
+          {
+            staticClass:
+              "cursor-pointer text-xs font-semibold px-5 md:px-8 py-1 md:py-2 rounded-full text-white bg-green-700",
+            attrs: { type: "button", disabled: _vm.isbeingCreating },
+            on: { click: _vm.submit },
+          },
           [
-            _vm._v("End Date:\n                "),
-            _c("datepicker", {
-              model: {
-                value: _vm.end_date,
-                callback: function ($$v) {
-                  _vm.end_date = $$v
-                },
-                expression: "end_date",
+            _vm.isbeingCreating
+              ? _c(
+                  "svg",
+                  {
+                    staticClass: "animate-spin mr-3 h-5 w-5 text-white",
+                    attrs: {
+                      xmlns: "http://www.w3.org/2000/svg",
+                      fill: "none",
+                      viewBox: "0 0 24 24",
+                    },
+                  },
+                  [
+                    _c("circle", {
+                      staticClass: "opacity-25",
+                      attrs: {
+                        cx: "12",
+                        cy: "12",
+                        r: "10",
+                        stroke: "currentColor",
+                        "stroke-width": "4",
+                      },
+                    }),
+                    _vm._v(" "),
+                    _c("path", {
+                      staticClass: "opacity-75",
+                      attrs: {
+                        fill: "currentColor",
+                        d: "M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z",
+                      },
+                    }),
+                  ]
+                )
+              : _vm._e(),
+            _vm._v(" "),
+            _c(
+              "span",
+              {
+                directives: [
+                  {
+                    name: "show",
+                    rawName: "v-show",
+                    value: !_vm.isbeingCreating,
+                    expression: "!isbeingCreating",
+                  },
+                ],
               },
-            }),
-          ],
-          1
+              [_vm._v("Submit")]
+            ),
+          ]
         ),
-        _vm._v(" "),
-        _c("button", [_vm._v("Submit")]),
       ]
     ),
     _vm._v(" "),
@@ -45521,21 +45521,17 @@ var render = function () {
       [
         _c("h1", [_vm._v("Fastest Asteroid")]),
         _vm._v(" "),
-        _c("blockquote", [
-          _c("strong", [_vm._v(_vm._s(_vm.fastestAstroid[0]))]),
-        ]),
+        _c("blockquote", [_c("strong", [_vm._v(_vm._s(_vm.fastestAstroid))])]),
         _vm._v(" "),
         _c("h1", [_vm._v("Closest Asteroid")]),
         _vm._v(" "),
-        _c("blockquote", [
-          _c("strong", [_vm._v(_vm._s(_vm.closetAstroid[0]))]),
-        ]),
+        _c("blockquote", [_c("strong", [_vm._v(_vm._s(_vm.closetAstroid))])]),
         _vm._v(" "),
         _c("h1", [_vm._v(" Asteroid Size Collection")]),
         _vm._v(" "),
         _vm._l(_vm.astriodSizeCollection, function (item) {
           return _c("li", [
-            _vm._v("\n               " + _vm._s(item) + "\n           "),
+            _vm._v("\n           " + _vm._s(item) + "\n       "),
           ])
         }),
       ],
@@ -45548,7 +45544,9 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", [_c("canvas", { attrs: { id: "myChart" } })])
+    return _c("div", { attrs: { id: "chart-conainer" } }, [
+      _c("canvas", { attrs: { id: "myChart" } }),
+    ])
   },
 ]
 render._withStripped = true
